@@ -2,13 +2,13 @@ import LoginForm from "@/app/ui/login-form";
 
 export default function LoginPage() {
   return (
-    <main className="flex items-center justify-center md:h-screen">
-      <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
+    <main className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <LoginForm />
-        <div className="mt-5 flex flex-col">
-          TEST 계정
-          <div>email: user@nextmail.com</div>
-          <div>pwd: 123456</div>
+        <div className="mt-6 text-center text-sm text-gray-600">
+          <p className="font-semibold">Test Account</p>
+          <p>Email: user@nextmail.com</p>
+          <p>Password: 123456</p>
         </div>
       </div>
     </main>

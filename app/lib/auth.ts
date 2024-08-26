@@ -33,6 +33,12 @@ export const authOptions = {
     async jwt({ token, user }) {
       return { ...token, ...user };
     },
+    async session({ session, token, user }) {
+      if (session.user && token.id) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
   },
 
   providers: [], // Add providers with an empty array for now

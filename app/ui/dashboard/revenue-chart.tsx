@@ -42,7 +42,7 @@ export default async function RevenueChart() {
           {revenue.map((month) => (
             <div key={month.month} className="flex flex-col items-center gap-2">
               <div
-                className="w-full rounded-md bg-yellow-300"
+                className="w-full rounded-md bg-slate-300"
                 style={{
                   height: `${(chartHeight / topLabel) * month.revenue}px`,
                 }}

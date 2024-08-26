@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import bcrypt from "bcrypt";
+import { auth } from "@/auth";
 
 const UserSchema = z.object({
   id: z.string().optional(),
@@ -39,6 +40,9 @@ export async function createUser(
   prevState: State,
   formData: FormData
 ): Promise<State> {
+  const session = await auth();
+  const id = session?.user.id || "0";
+  console.log(id, "로그인한 유저의 아이디");
   const validatedFields = CreateUserSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

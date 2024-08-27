@@ -1,9 +1,40 @@
 import { sql } from "@vercel/postgres";
 import { PostsTable } from "./definitions";
 const ITEMS_PER_PAGE = 6;
+
+export async function fetchPostById(id: string) {
+  try {
+    const data = await sql<PostsTable>`
+        select post.id, 
+        post.user_id,
+        urs."name" as user_name,
+        post.category_id,
+        post.title,
+        post."content",
+        post.view_count,
+        post.created_at,
+        post.updated_at 
+        from posts post
+        left join users urs
+        on urs.id  = post.user_id  
+        where post.id = ${id}
+    `;
+
+    const post = data.rows.map((invoice) => ({
+      ...invoice,
+      // Convert data
+    }));
+
+    return post[0];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoice.");
+  }
+}
+
 export async function fetchPostsPages(query: string) {
-	try {
-		const count = await sql` select count(*)
+  try {
+    const count = await sql` select count(*)
         from posts post
         left join users urs
         on urs.id  = post.user_id 
@@ -11,19 +42,19 @@ export async function fetchPostsPages(query: string) {
         post.title ILIKE ${`%${query}%`}
     `;
 
-		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-		return totalPages;
-	} catch (error) {
-		console.error("Database Error:", error);
-		throw new Error("Failed to fetch total number of posts.");
-	}
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch total number of posts.");
+  }
 }
 
 export async function fetchFilteredPosts(query: string, currentPage: number) {
-	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
-	try {
-		const posts = await sql<PostsTable>`
+  try {
+    const posts = await sql<PostsTable>`
         select post.id, 
         post.user_id,
         urs."name" as user_name,
@@ -42,9 +73,9 @@ export async function fetchFilteredPosts(query: string, currentPage: number) {
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
       `;
 
-		return posts.rows;
-	} catch (error) {
-		console.error("Database Error:", error);
-		throw new Error("Failed to fetch posts.");
-	}
+    return posts.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch posts.");
+  }
 }

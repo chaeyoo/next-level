@@ -1,17 +1,27 @@
 "use client";
-import { useActionState } from "react";
-import { CategoryField } from "@/app/lib/definitions";
-import Link from "next/link";
-import { UserCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Button } from "@/app/ui/button";
-import { createPost, State } from "@/app/lib/posts/actions";
 
-export default function Form({ categories }: { categories: CategoryField[] }) {
+import { CategoryField } from "@/app/lib/definitions";
+import { PencilSquareIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { Button } from "@/app/ui/button";
+import { useActionState } from "react";
+import { PostsTable } from "@/app/lib/posts/definitions";
+import { State, updatePost } from "@/app/lib/posts/actions";
+
+export default function EditPosteForm({
+  post,
+  categories,
+}: {
+  post: PostsTable;
+  categories: CategoryField[];
+}) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createPost, initialState);
+  const updatePostWithId = updatePost.bind(null, post.id);
+  const [state, formAction] = useActionState(updatePostWithId, initialState);
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        {/* Customer Name */}
         <div className="mb-4">
           <label
             htmlFor="categoryId"
@@ -24,8 +34,7 @@ export default function Form({ categories }: { categories: CategoryField[] }) {
               id="categoryId"
               name="categoryId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue=""
-              aria-describedby="categoryId-error"
+              defaultValue={post.category_id}
             >
               <option value="" disabled>
                 카테고리 선택
@@ -48,6 +57,7 @@ export default function Form({ categories }: { categories: CategoryField[] }) {
           </div>
         </div>
 
+        {/* Invoice Amount */}
         <div className="mb-4">
           <label htmlFor="title" className="mb-2 block text-sm font-medium">
             제목
@@ -60,6 +70,7 @@ export default function Form({ categories }: { categories: CategoryField[] }) {
                 type="text"
                 placeholder="제목을 입력해주세요."
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                defaultValue={post.title}
                 required
               />
               <PencilSquareIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -84,6 +95,7 @@ export default function Form({ categories }: { categories: CategoryField[] }) {
               <textarea
                 id="content"
                 name="content"
+                defaultValue={post.content}
                 placeholder="내용을 입력해주세요."
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 required
@@ -107,7 +119,7 @@ export default function Form({ categories }: { categories: CategoryField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">발행하기</Button>
+        <Button type="submit">Edit Post</Button>
       </div>
     </form>
   );

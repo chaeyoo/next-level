@@ -9,6 +9,7 @@ export async function fetchPostById(id: string) {
         post.user_id,
         urs."name" as user_name,
         post.category_id,
+        ctgr."name" as category_name,
         post.title,
         post."content",
         post.view_count,
@@ -16,7 +17,9 @@ export async function fetchPostById(id: string) {
         post.updated_at 
         from posts post
         left join users urs
-        on urs.id  = post.user_id  
+        on urs.id  = post.user_id
+        left join categories ctgr
+        on ctgr.id = post.category_id 
         where post.id = ${id}
     `;
 

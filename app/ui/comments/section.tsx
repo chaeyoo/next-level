@@ -1,6 +1,5 @@
 import { Comment } from "@/app/lib/comments/definitions";
 import { auth } from "@/auth";
-import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 import ReplyForm from "./reply-form";
 import { DeleteComment } from "./buttons";
 import EditCommentForm from "./edit-form";

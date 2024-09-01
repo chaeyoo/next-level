@@ -1,27 +1,41 @@
 import { sql } from "@vercel/postgres";
 import { PostsTable } from "./definitions";
 import { Comment } from "@/app/lib/comments/definitions";
+import { auth } from "@/auth";
 const ITEMS_PER_PAGE = 6;
 
 export async function fetchPostById(id: string) {
+	const session = await auth();
+	const loginUserId = session?.user.id || undefined;
 	try {
 		const data = await sql<PostsTable>`
-        select post.id, 
-        post.user_id,
-        urs."name" as user_name,
-        post.category_id,
-        ctgr."name" as category_name,
-        post.title,
-        post."content",
-        post.view_count,
-        post.created_at,
-        post.updated_at 
-        from posts post
-        left join users urs
-        on urs.id  = post.user_id
-        left join categories ctgr
-        on ctgr.id = post.category_id 
-        where post.id = ${id}
+        SELECT 
+            post.id, 
+            post.user_id,
+            urs."name" AS user_name,
+            post.category_id,
+            ctgr."name" AS category_name,
+            post.title,
+            post."content",
+            post.view_count,
+            post.created_at,
+            post.updated_at, 
+            li.id AS like_id,
+            COALESCE(like_count.total_likes, 0) AS like_count
+        FROM 
+            posts post
+        LEFT JOIN 
+            users urs ON urs.id = post.user_id
+        LEFT JOIN 
+            categories ctgr ON ctgr.id = post.category_id
+        LEFT JOIN 
+            likes li ON li.post_id = post.id AND li.user_id = ${loginUserId}
+        LEFT JOIN 
+            (SELECT post_id, COUNT(*) AS total_likes 
+            FROM likes 
+            GROUP BY post_id) AS like_count ON like_count.post_id = post.id
+        WHERE 
+            post.id = ${id}
     `;
 		const commentsResult = await sql`
     WITH RECURSIVE comment_tree AS (
@@ -47,8 +61,9 @@ export async function fetchPostById(id: string) {
     SELECT * FROM comment_tree
     ORDER BY path
   `;
-		const post = data.rows.map((invoice) => ({
-			...invoice,
+		const post = data.rows.map((post) => ({
+			...post,
+			isLiked: post.like_id ? true : false,
 			// Convert data
 		}));
 

@@ -10,4 +10,7 @@ export type PostsTable = {
 	created_at: string;
 	updated_at: string;
 	comment_count: number;
+	like_id: string;
+	isLiked: boolean;
+	like_count: number;
 };

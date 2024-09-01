@@ -3,12 +3,9 @@
 import { CategoryField } from "@/app/lib/definitions";
 import { PencilSquareIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { Button } from "@/app/ui/button";
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { PostsTable } from "@/app/lib/posts/definitions";
 import { State, updatePost } from "@/app/lib/posts/actions";
-import { Editor } from "@tinymce/tinymce-react";
-import type { Editor as TinyMCEEditor } from "tinymce";
 import EditorComponent from "../editor";
 
 export default function EditPosteForm({
@@ -99,6 +96,7 @@ export default function EditPosteForm({
 							<textarea
 								id="content"
 								name="content"
+								value={content}
 								defaultValue={post.content}
 								placeholder="내용을 입력해주세요."
 								className="peer hidden w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -122,12 +120,17 @@ export default function EditPosteForm({
 			</div>
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
-					href="/dashboard/invoices"
+					href={`/posts/${post.id}`}
 					className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
 				>
-					Cancel
+					취소
 				</Link>
-				<Button type="submit">Edit Post</Button>
+				<button
+					className="flex h-10 items-center rounded-lg bg-slate-900 text-white px-4 text-sm font-medium transition-colors hover:bg-slate-700"
+					type="submit"
+				>
+					수정
+				</button>
 			</div>
 		</form>
 	);

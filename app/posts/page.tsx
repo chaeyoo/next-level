@@ -9,41 +9,39 @@ import PostTable from "./table";
 import { fetchCategories } from "../lib/data";
 
 export default async function Page({
-  searchParams,
+	searchParams,
 }: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
+	searchParams?: {
+		query?: string;
+		page?: string;
+	};
 }) {
-  const query = searchParams?.query || "";
-  const currentPage = Number(searchParams?.page) || 1;
+	const query = searchParams?.query || "";
+	const currentPage = Number(searchParams?.page) || 1;
 
-  const [totalPages, category] = await Promise.all([
-    await fetchPostsPages(query),
-    await fetchCategories(),
-  ]);
-
-  console.log(category, "category");
-  return (
-    <div className="w-full">
-      <div className="flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>Posts</h1>
-      </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search post..." />
-        <CreatePost />
-      </div>
-      <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
-        <PostTable
-          query={query}
-          currentPage={currentPage}
-          category={category}
-        />
-      </Suspense>
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
-      </div>
-    </div>
-  );
+	const [totalPages, category] = await Promise.all([
+		await fetchPostsPages(query),
+		await fetchCategories(),
+	]);
+	return (
+		<div className="w-full">
+			<div className="flex w-full items-center justify-between">
+				<h1 className={`${lusitana.className} text-2xl`}>Posts</h1>
+			</div>
+			<div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+				<Search placeholder="Search post..." />
+				<CreatePost />
+			</div>
+			<Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+				<PostTable
+					query={query}
+					currentPage={currentPage}
+					category={category}
+				/>
+			</Suspense>
+			<div className="mt-5 flex w-full justify-center">
+				<Pagination totalPages={totalPages} />
+			</div>
+		</div>
+	);
 }

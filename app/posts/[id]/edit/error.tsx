@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Error({
@@ -16,16 +17,13 @@ export default function Error({
 
 	return (
 		<main className="flex h-full flex-col items-center justify-center">
-			<h2 className="text-center">Something went wrong!</h2>
-			<button
-				className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
-				onClick={
-					// Attempt to recover by trying to re-render the invoices route
-					() => reset()
-				}
+			<h2 className="text-center">권한이 없습니다.</h2>
+			<Link
+				href={`/posts`}
+				className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 mt-10"
 			>
-				Try again
-			</button>
+				돌아가기
+			</Link>
 		</main>
 	);
 }

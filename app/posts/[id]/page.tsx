@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 export default async function Page({ params }: { params: { id: string } }) {
 	const id = params.id;
 
-	const post = await fetchPostById(id);
-	console.log(post)
+	const { post, comments } = await fetchPostById(id);
+
 	if (!post) {
 		notFound();
 	}
@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 					},
 				]}
 			/>
-			<ViewPost post={post} />
+			<ViewPost post={post} comments={comments} />
 		</main>
 	);
 }

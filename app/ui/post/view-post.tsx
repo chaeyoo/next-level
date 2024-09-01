@@ -2,8 +2,16 @@ import { PostsTable } from "@/app/lib/posts/definitions";
 import { auth } from "@/auth";
 import { sanitize } from "isomorphic-dompurify";
 import Link from "next/link";
+import CommentSection from "../comments/section";
+import { Comment } from "@/app/lib/comments/definitions";
 
-export default async function ViewPost({ post }: { post: PostsTable }) {
+export default async function ViewPost({
+	post,
+	comments,
+}: {
+	post: PostsTable;
+	comments: Comment[];
+}) {
 	const sanitizedContent = sanitize(post.content);
 	const formattedDate = new Date(post.created_at).toLocaleDateString("ko-KR", {
 		year: "numeric",
@@ -46,6 +54,7 @@ export default async function ViewPost({ post }: { post: PostsTable }) {
 					</Link>
 				)}
 			</div>
+			<CommentSection comments={comments} postId={post.id} />
 		</div>
 	);
 }

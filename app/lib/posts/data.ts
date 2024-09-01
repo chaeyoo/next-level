@@ -89,22 +89,36 @@ export async function fetchFilteredPosts(query: string, currentPage: number) {
 
 	try {
 		const posts = await sql<PostsTable>`
-        select post.id, 
-        post.user_id,
-        urs."name" as user_name,
-        post.category_id,
-        post.title,
-        post."content",
-        post.view_count,
-        post.created_at,
-        post.updated_at 
-        from posts post
-        left join users urs
-        on urs.id  = post.user_id  
-        where urs.name ILIKE  ${`%${query}%`} OR
-        post.title ILIKE ${`%${query}%`}
-        ORDER BY post.updated_at DESC
-        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+          SELECT 
+          post.id, 
+          post.user_id,
+          urs."name" as user_name,
+          post.category_id,
+          post.title,
+          post."content",
+          post.view_count,
+          post.created_at,
+          post.updated_at,
+          COALESCE(comment_counts.comment_count, 0) as comment_count
+          FROM 
+              posts post
+          LEFT JOIN 
+              users urs ON urs.id = post.user_id
+          LEFT JOIN (
+              SELECT 
+                  post_id, 
+                  COUNT(*) as comment_count
+              FROM 
+                  comments
+              GROUP BY 
+                  post_id
+          ) comment_counts ON comment_counts.post_id = post.id
+          WHERE 
+              urs.name ILIKE ${`%${query}%`} OR
+              post.title ILIKE ${`%${query}%`}
+          ORDER BY 
+              post.updated_at DESC
+          LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
       `;
 
 		return posts.rows;

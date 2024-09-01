@@ -3,7 +3,7 @@
 import { CategoryField } from "@/app/lib/definitions";
 import { PencilSquareIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useState } from "react";
 import { PostsTable } from "@/app/lib/posts/definitions";
 import { State, updatePost } from "@/app/lib/posts/actions";
 import EditorComponent from "../editor";

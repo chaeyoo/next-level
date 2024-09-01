@@ -2,12 +2,10 @@ import { PostsTable } from "@/app/lib/posts/definitions";
 import { auth } from "@/auth";
 import { sanitize } from "isomorphic-dompurify";
 import Link from "next/link";
-import CommentSection from "../comments/section";
 import { Comment } from "@/app/lib/comments/definitions";
 
 export default async function ViewPost({
 	post,
-	comments,
 }: {
 	post: PostsTable;
 	comments: Comment[];
@@ -21,7 +19,7 @@ export default async function ViewPost({
 	const session = await auth();
 	const userId = session?.user.id || undefined;
 	return (
-		<div className="max-w-4xl mx-auto px-4">
+		<div >
 			<div className="mb-6">
 				<span className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">
 					{post.category_name}
@@ -41,7 +39,7 @@ export default async function ViewPost({
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
 					href="/posts"
-					className="flex h-10 items-center rounded-lg bg-slate-900 text-white px-4 text-sm font-medium transition-colors hover:bg-slate-700"
+					className="flex h-10 items-center rounded-lg bg-slate-500 text-white px-4 text-sm font-medium transition-colors hover:bg-slate-700"
 				>
 					목록
 				</Link>
@@ -54,7 +52,6 @@ export default async function ViewPost({
 					</Link>
 				)}
 			</div>
-			<CommentSection comments={comments} postId={post.id} />
 		</div>
 	);
 }

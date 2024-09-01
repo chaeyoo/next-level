@@ -32,7 +32,6 @@ export async function createPost(prevState: State, formData: FormData) {
 		content: formData.get("content"),
 	});
 
-	console.log(formData, "formData");
 	const session = await auth();
 	const id = session?.user.id || "0";
 	if (!validatedFields.success) {
@@ -63,7 +62,6 @@ export async function updatePost(
 	prevState: State,
 	formData: FormData
 ) {
-	// 세션에서 현재 로그인한 사용자의 ID 가져오기
 	const session = await auth();
 	const userId = session?.user.id;
 
@@ -71,7 +69,6 @@ export async function updatePost(
 		return { message: "Authentication Error: User not logged in." };
 	}
 
-	// 폼 데이터 유효성 검사
 	const validatedFields = UpdatePost.safeParse({
 		categoryId: formData.get("categoryId"),
 		title: formData.get("title"),
@@ -88,7 +85,6 @@ export async function updatePost(
 	const { categoryId, title, content } = validatedFields.data;
 
 	try {
-		// 포스트 소유자 확인
 		const postOwner = await sql`
 		SELECT user_id FROM posts WHERE id = ${id}
 	  `;
@@ -100,7 +96,6 @@ export async function updatePost(
 			};
 		}
 
-		// 포스트 업데이트
 		await sql`
 		UPDATE posts
 		SET category_id = ${categoryId}, 

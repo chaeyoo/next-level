@@ -40,6 +40,7 @@ export default async function PostTable({
 											>
 												{post.title}
 											</Link>
+											<span className="ml-3">{`(${post.comment_count})`}</span>
 										</div>
 										<p className="text-sm text-gray-500">{post.user_name}</p>
 									</div>
@@ -91,8 +92,7 @@ export default async function PostTable({
 									<td className="py-3 pl-6 pr-3 text-center">
 										{getCategoryName(post.category_id)}
 									</td>
-									{/* 
-									<td className=" px-3 py-3 text-center">{post.title}</td> */}
+
 									<td className=" px-3 py-3 text-center">
 										<Link
 											href={`/posts/${post.id}`}
@@ -100,6 +100,7 @@ export default async function PostTable({
 										>
 											{post.title}
 										</Link>
+										<span className="ml-3">{`(${post.comment_count})`}</span>
 									</td>
 									<td className=" px-3 py-3 text-center">{post.user_name}</td>
 

@@ -20,7 +20,6 @@ export default async function Page({
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchInvoicesPages(query);
   const session = await auth();
-  console.log(session?.user);
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">

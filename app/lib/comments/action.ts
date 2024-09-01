@@ -174,7 +174,6 @@ export async function updateComment(
 	const session = await auth();
 	const userId = session?.user.id;
 
-
 	if (!userId) {
 		return { message: "Authentication Error: User not logged in." };
 	}
@@ -217,5 +216,7 @@ export async function updateComment(
 	}
 
 	revalidatePath(`/posts/${postId}`);
-	redirect(`/posts/${postId}`);
+	return {
+		message: "success",
+	};
 }

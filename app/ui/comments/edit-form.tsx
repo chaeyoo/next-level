@@ -1,7 +1,7 @@
 "use client";
 
 import { CommentState, updateComment } from "@/app/lib/comments/action";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 interface EditCommentFormProps {
 	id: string;
@@ -20,6 +20,12 @@ export default function EditCommentForm({
 	const initialState: CommentState = { message: null, errors: {} };
 	const updateCommentWithId = updateComment.bind(null, id);
 	const [state, formAction] = useActionState(updateCommentWithId, initialState);
+
+	useEffect(() => {
+		if (state?.message === "success") {
+			setIsEditing(false);
+		}
+	}, [state]);
 
 	return (
 		<div className="w-full">

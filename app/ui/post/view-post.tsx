@@ -21,7 +21,7 @@ export default async function ViewPost({
 	const session = await auth();
 	const userId = session?.user.id || undefined;
 	return (
-		<div className="max-w-4xl mx-auto px-4 py-8">
+		<div className="max-w-4xl mx-auto px-4">
 			<div className="mb-6">
 				<span className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">
 					{post.category_name}

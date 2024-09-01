@@ -4,6 +4,7 @@ import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 import ReplyForm from "./reply-form";
 import { DeleteComment } from "./buttons";
 import EditCommentForm from "./edit-form";
+import dayjs from "dayjs";
 
 export default async function CommentSection({
 	comments,
@@ -35,7 +36,8 @@ export default async function CommentSection({
 									{comment.user_name}
 								</span>
 								<span className="text-xs text-gray-500">
-									{new Date(comment.created_at).toLocaleString()}
+									{dayjs(comment.created_at)
+										.format("YYYY-MM-DD HH:mm:ss")}
 								</span>
 							</div>
 							<div className="mt-2 flex items-end justify-between space-x-2 text-sm">
@@ -56,8 +58,7 @@ export default async function CommentSection({
 					</div>
 				</div>
 				<div className="mt-3">
-
-				{replies.map((reply) => renderComment(reply, level + 1))}
+					{replies.map((reply) => renderComment(reply, level + 1))}
 				</div>
 				{level === 0 && (
 					<ReplyForm

@@ -105,7 +105,7 @@ export default async function PostTable({
 									<td className=" px-3 py-3 text-center">{post.user_name}</td>
 
 									<td className=" px-3 py-3 text-center">
-										{dayjs(post.created_at).format("YYYY-MM-DD HH:mm:ss")}
+										{dayjs(post.created_at).add(9, 'hours').format("YYYY-MM-DD HH:mm:ss")}
 									</td>
 									<td className=" px-3 py-3 text-center">{post.view_count}</td>
 									<td className=" py-3 pl-6 pr-3">

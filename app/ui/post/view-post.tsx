@@ -3,7 +3,6 @@ import { auth } from "@/auth";
 import { sanitize } from "isomorphic-dompurify";
 import Link from "next/link";
 import { Comment } from "@/app/lib/comments/definitions";
-import { incrementViewCount } from "@/app/lib/posts/actions";
 
 export default async function ViewPost({
   post,
@@ -19,7 +18,7 @@ export default async function ViewPost({
   });
   const session = await auth();
   const userId = session?.user.id || undefined;
-  await incrementViewCount(post.id.toString());
+
 
   return (
     <div>

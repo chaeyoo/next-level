@@ -11,6 +11,6 @@ export type PostsTable = {
 	updated_at: string;
 	comment_count: number;
 	like_id: string;
-	isLiked: boolean;
+	is_liked: boolean;
 	like_count: number;
 };

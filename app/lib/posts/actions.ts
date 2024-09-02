@@ -86,7 +86,7 @@ export async function updatePost(
 
   try {
     const postOwner = await sql`
-		SELECT user_id FROM posts WHERE id = ${id}
+		  SELECT user_id FROM posts WHERE id = ${id}
 	  `;
 
     if (postOwner.rows[0]?.user_id !== userId) {
@@ -97,12 +97,12 @@ export async function updatePost(
     }
 
     await sql`
-		UPDATE posts
-		SET category_id = ${categoryId}, 
-			title = ${title}, 
-			content = ${content},
-			updated_at = CURRENT_TIMESTAMP
-		WHERE id = ${id} AND user_id = ${userId}
+      UPDATE posts
+      SET category_id = ${categoryId}, 
+        title = ${title}, 
+        content = ${content},
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${id} AND user_id = ${userId}
 	  `;
   } catch (error) {
     return { message: "Database Error: Failed to Update Post." };
@@ -150,4 +150,33 @@ export async function unlikePost(id: string) {
   } catch (error) {
     return { message: "Database Error: Failed to Like a post." };
   }
+}
+
+export async function incrementViewCount(postId: string) {
+  const session = await auth();
+  const userId = session?.user.id;
+
+  if (!userId) {
+    // 로그인하지 않은 사용자의 경우, 단순히 view_count만 증가
+    await sql`
+      UPDATE posts
+      SET view_count = view_count + 1
+      WHERE id = ${postId}
+    `;
+  } else {
+    await sql`
+    INSERT INTO view_logs (user_id, post_id)
+    VALUES (${userId}, ${postId})
+    ON CONFLICT (user_id, post_id) DO NOTHING
+    `;
+
+    // view_count 증가 (별도의 쿼리로 실행)
+    await sql`
+    UPDATE posts
+    SET view_count = view_count + 1
+    WHERE id = ${postId}
+    `;
+  }
+
+  revalidatePath(`/posts/${postId}`);
 }

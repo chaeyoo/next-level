@@ -1,20 +1,23 @@
-import { fetchFilteredPosts } from "../lib/posts/data";
-import { PostsTable } from "../lib/posts/definitions";
+import { fetchFilteredPosts } from "@/app/lib/posts/data";
+import { PostsTable } from "@/app/lib/posts/definitions";
 import dayjs from "dayjs";
-import { CategoryField } from "../lib/definitions";
-import { DeletePost, UpdatePost } from "../ui/post/buttons";
+
+import { DeletePost, UpdatePost } from "@/app/ui/post/buttons";
 import Link from "next/link";
 import { auth } from "@/auth";
+import { CategoryField } from "@/app/lib/definitions";
 export default async function PostTable({
+	categoryId,
 	query,
 	currentPage,
 	category,
 }: {
+	categoryId: string;
 	query: string;
 	currentPage: number;
 	category: CategoryField[];
 }) {
-	const posts = await fetchFilteredPosts(query, currentPage);
+	const posts = await fetchFilteredPosts(categoryId, query, currentPage);
 
 	function getCategoryName(categoryId: number) {
 		return category.find((cat) => cat.id === categoryId)?.name;

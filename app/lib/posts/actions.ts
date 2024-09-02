@@ -108,8 +108,8 @@ export async function updatePost(
 		return { message: "Database Error: Failed to Update Post." };
 	}
 
-	revalidatePath("/posts");
-	redirect("/posts");
+	revalidatePath(`/posts/${id}`);
+	redirect(`/posts/${id}`);
 }
 
 export async function deletePost(id: string) {

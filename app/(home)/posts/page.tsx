@@ -1,26 +1,29 @@
 import { lusitana } from "@/app/ui/fonts";
 import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
-import Pagination from "../ui/pagination";
-import Search from "../ui/search";
-import { CreatePost } from "../ui/post/buttons";
-import { fetchPostsPages } from "../lib/posts/data";
+import Pagination from "@/app/ui/pagination";
+import Search from "@/app/ui/search";
+import { CreatePost } from "@/app/ui/post/buttons";
+import { fetchPostsPages } from "@/app/lib/posts/data";
 import PostTable from "./table";
-import { fetchCategories } from "../lib/data";
+import { fetchCategories } from "@/app/lib/data";
+import Filter from "@/app/ui/post/Filter";
 
 export default async function Page({
 	searchParams,
 }: {
 	searchParams?: {
+		categoryId?: string;
 		query?: string;
 		page?: string;
 	};
 }) {
+	const categoryId = searchParams?.categoryId || "";
 	const query = searchParams?.query || "";
 	const currentPage = Number(searchParams?.page) || 1;
 
 	const [totalPages, category] = await Promise.all([
-		await fetchPostsPages(query),
+		await fetchPostsPages(categoryId, query),
 		await fetchCategories(),
 	]);
 	return (
@@ -29,11 +32,13 @@ export default async function Page({
 				<h1 className={`${lusitana.className} text-2xl`}>Posts</h1>
 			</div>
 			<div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+				<Filter categories={category} />
 				<Search placeholder="Search post..." />
 				<CreatePost />
 			</div>
 			<Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
 				<PostTable
+					categoryId={categoryId}
 					query={query}
 					currentPage={currentPage}
 					category={category}

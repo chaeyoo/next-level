@@ -85,15 +85,23 @@ export async function fetchPostById(id: string) {
 	}
 }
 
-export async function fetchPostsPages(query: string) {
+export async function fetchPostsPages(categoryId: string, query: string) {
 	try {
-		const count = await sql` select count(*)
-        from posts post
-        left join users urs
-        on urs.id  = post.user_id 
-        where urs.name ILIKE  ${`%${query}%`} OR
-        post.title ILIKE ${`%${query}%`}
+		let countQueryStr = `
+      SELECT COUNT(*)
+      FROM posts post
+      LEFT JOIN users urs ON urs.id = post.user_id 
+      WHERE (urs.name ILIKE $1 OR post.title ILIKE $1)
     `;
+
+		const params = [`%${query}%`];
+
+		if (categoryId !== "") {
+			countQueryStr += ` AND post.category_id = $2`;
+			params.push(categoryId);
+		}
+
+		const count = await sql.query(countQueryStr, params);
 
 		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
 		return totalPages;
@@ -103,52 +111,66 @@ export async function fetchPostsPages(query: string) {
 	}
 }
 
-export async function fetchFilteredPosts(query: string, currentPage: number) {
+export async function fetchFilteredPosts(
+	categoryId: string,
+	query: string,
+	currentPage: number
+) {
 	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
 	try {
-		const posts = await sql<PostsTable>`
+		let postsQueryStr = `
+        SELECT 
+          post.id, 
+          post.user_id,
+          urs."name" as user_name,
+          post.category_id,
+          post.title,
+          post."content",
+          COALESCE(view_counts.view_count, 0) as view_count,
+          post.created_at,
+          post.updated_at,
+          COALESCE(comment_counts.comment_count, 0) as comment_count
+        FROM 
+          posts post
+        LEFT JOIN 
+          users urs ON urs.id = post.user_id
+        LEFT JOIN (
           SELECT 
-                post.id, 
-                post.user_id,
-                urs."name" as user_name,
-                post.category_id,
-                post.title,
-                post."content",
-                COALESCE(view_counts.view_count, 0) as view_count,
-                post.created_at,
-                post.updated_at,
-                COALESCE(comment_counts.comment_count, 0) as comment_count
-            FROM 
-                posts post
-            LEFT JOIN 
-                users urs ON urs.id = post.user_id
-            LEFT JOIN (
-                SELECT 
-                    post_id, 
-                    COUNT(*) as comment_count
-                FROM 
-                    comments
-                GROUP BY 
-                    post_id
-            ) comment_counts ON comment_counts.post_id = post.id
-            LEFT JOIN (
-                SELECT 
-                    post_id, 
-                    COUNT(*) as view_count
-                FROM 
-                    view_logs
-                GROUP BY 
-                    post_id
-            ) view_counts ON view_counts.post_id = post.id
-            WHERE 
-                urs.name ILIKE ${`%${query}%`} OR
-                post.title ILIKE ${`%${query}%`}
-            ORDER BY 
-                post.updated_at DESC
-            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+            post_id, 
+            COUNT(*) as comment_count
+          FROM 
+            comments
+          GROUP BY 
+            post_id
+        ) comment_counts ON comment_counts.post_id = post.id
+        LEFT JOIN (
+          SELECT 
+            post_id, 
+            COUNT(*) as view_count
+          FROM 
+            view_logs
+          GROUP BY 
+            post_id
+        ) view_counts ON view_counts.post_id = post.id
+        WHERE (urs.name ILIKE $1 OR post.title ILIKE $1)
       `;
 
+		const params = [`%${query}%`];
+
+		if (categoryId !== "") {
+			postsQueryStr += ` AND post.category_id = $2`;
+			params.push(categoryId);
+		}
+
+		postsQueryStr += `
+        ORDER BY post.updated_at DESC
+        LIMIT $${params.length + 1} OFFSET $${params.length + 2}
+      `;
+
+		params.push(ITEMS_PER_PAGE.toString(), offset.toString());
+
+		const posts = await sql.query<PostsTable>(postsQueryStr, params);
 		return posts.rows;
 	} catch (error) {
 		console.error("Database Error:", error);

@@ -93,14 +93,13 @@ export default function EditPosteForm({
 					</label>
 					<div className="relative mt-2 rounded-md">
 						<div className="relative">
-							<textarea
+							<input
 								id="content"
 								name="content"
+								onChange={() => {}}
 								value={content}
 								defaultValue={post.content}
-								placeholder="내용을 입력해주세요."
-								className="peer hidden w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-								required
+								className="hidden peer w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 							/>
 							<EditorComponent
 								setContent={setContent}

@@ -8,13 +8,20 @@ import { z } from "zod";
 
 const FormSchema = z.object({
 	id: z.string(),
-	categoryId: z.string(),
-	title: z.string().max(30),
-	content: z.string(),
+	userId: z.string().uuid().optional(),
+	categoryId: z.string({
+		required_error: "카테고리를 선택해주세요.",
+		invalid_type_error: "카테고리를 선택해주세요.",
+	}),
+	title: z
+		.string()
+		.min(1, "제목을 입력해주세요.")
+		.max(200, "제목은 200자 이하로 입력해주세요."),
+	content: z.string().min(1, "내용을 입력해주세요."),
 });
 
-const CreatePost = FormSchema.omit({ id: true });
-const UpdatePost = FormSchema.omit({ id: true });
+const CreatePost = FormSchema.omit({ id: true, userId: true });
+const UpdatePost = FormSchema.omit({ id: true, userId: true });
 
 export type State = {
 	errors?: {
@@ -65,6 +72,7 @@ export async function updatePost(
 	const session = await auth();
 	const userId = session?.user.id;
 
+	console.log(formData, 'formData???????????')
 	if (!userId) {
 		return { message: "Authentication Error: User not logged in." };
 	}

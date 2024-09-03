@@ -84,15 +84,17 @@ export default function Form({ categories }: { categories: CategoryField[] }) {
 					</label>
 					<div className="relative mt-2 rounded-md">
 						<div className="relative">
-							<textarea
+							<input
 								id="content"
 								name="content"
+								onChange={() => {}}
 								value={content}
-								placeholder="내용을 입력해주세요."
 								className="hidden peer w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-								required
 							/>
-							<EditorComponent setContent={setContent} initContent={"<p></p>"} />
+							<EditorComponent
+								setContent={setContent}
+								initContent={"<p></p>"}
+							/>
 						</div>
 					</div>
 					<div id="content-error" aria-live="polite" aria-atomic="true">

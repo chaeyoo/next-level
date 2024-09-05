@@ -8,7 +8,6 @@ export default function Filter({
 }: {
 	categories: CategoryField[];
 }) {
-	console.log(categories);
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
 	const { replace } = useRouter();

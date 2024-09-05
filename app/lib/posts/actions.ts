@@ -126,6 +126,7 @@ export async function deletePost(id: string) {
 		revalidatePath("/posts");
 		return { message: "Deleted Post." };
 	} catch (error) {
+		console.error(error)
 		return { message: "Database Error: Failed to Delete Post." };
 	}
 }

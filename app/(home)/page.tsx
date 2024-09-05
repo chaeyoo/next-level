@@ -1,5 +1,3 @@
-import CardWrapper from "@/app/ui/dashboard/cards";
-import RevenueChart from "@/app/ui/dashboard/revenue-chart";
 import { lusitana } from "@/app/ui/fonts";
 import { Suspense } from "react";
 import {
@@ -7,26 +5,28 @@ import {
 	RevenueChartSkeleton,
 	CardsSkeleton,
 } from "@/app/ui/skeletons";
-import LatestInvoices from "@/app/ui/dashboard/latest-invoices";
+import PostReport from "../ui/post/dashboard/post-report";
+import CategoryReport from "../ui/post/dashboard/category-report";
+import CommentReport from "../ui/post/dashboard/comment-report";
 
 export default async function Page() {
 	return (
 		<main>
 			<h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-				대시보드
+				게시판 대시보드
 			</h1>
 			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				<Suspense fallback={<CardsSkeleton />}>
-					<CardWrapper />
+					<PostReport />
 				</Suspense>
 			</div>
 			<div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
 				<Suspense fallback={<RevenueChartSkeleton />}>
-					<RevenueChart />
+					<CategoryReport />
 				</Suspense>
 
 				<Suspense fallback={<LatestInvoicesSkeleton />}>
-					<LatestInvoices />
+					<CommentReport />
 				</Suspense>
 			</div>
 		</main>

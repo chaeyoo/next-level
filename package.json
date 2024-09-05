@@ -13,6 +13,7 @@
     "autoprefixer": "10.4.19",
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
+    "d3": "^7.9.0",
     "dayjs": "^1.11.13",
     "isomorphic-dompurify": "^2.15.0",
     "next": "15.0.0-canary.56",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/d3": "^7.4.3",
     "@types/node": "20.14.8",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",

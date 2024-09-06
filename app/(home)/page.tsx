@@ -1,40 +1,41 @@
-import { lusitana } from "@/app/ui/fonts";
 import { Suspense } from "react";
-import {
-	LatestInvoicesSkeleton,
-	RevenueChartSkeleton,
-	CardsSkeleton,
-} from "@/app/ui/skeletons";
-import PostReport from "../ui/post/dashboard/post-report";
-import CategoryReport from "../ui/post/dashboard/category-report";
-import CommentReport from "../ui/post/dashboard/comment-report";
-import {
-	fetchCategoryReport,
-	fetchCommentsReport,
-	fetchPostsReport,
-} from "../lib/posts/dashboard/data";
+import { CardsSkeleton, CommentListSkeleton } from "@/app/ui/skeletons";
+import { fetchCategoryReport } from "../lib/posts/dashboard/data";
 import ChartSkeleton from "../ui/post/chart-skeleton";
-import GroupedBarChartWrapper from "../ui/post/dashboard/post-report";
 import StackedBarChartWrapper from "../ui/post/dashboard/category-report";
-import BubbleChartWrapper from "../ui/post/dashboard/comment-report";
+
+import CardWrapper from "../ui/post/dashboard/card-wrapper";
+import CommentList from "../ui/post/dashboard/comment-list";
+import { lusitana } from "../ui/fonts";
+import Link from "next/link";
+import { ArrowRightCircleIcon } from "@heroicons/react/24/solid";
 
 export default async function Page() {
-	const postStats = await fetchPostsReport();
 	const categoryStats = await fetchCategoryReport();
-	const commentStats = await fetchCommentsReport();
 
 	return (
 		<div className="p-4">
-			<h1 className="text-2xl font-bold mb-4">대시보드</h1>
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<Suspense fallback={<ChartSkeleton />}>
-					<GroupedBarChartWrapper data={postStats} />
+			<Link href={"/posts"} className=" mb-4 flex underline text-xl justify-end">
+				게시판으로 가기
+				<ArrowRightCircleIcon className="w-5" />
+			</Link>
+			<h2
+				className={`${lusitana.className} mb-4 text-xl md:text-2xl font-semibold`}
+			>
+				이번주 게시판 통계
+			</h2>
+			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+				<Suspense fallback={<CardsSkeleton />}>
+					<CardWrapper />
 				</Suspense>
+			</div>
+
+			<div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
 				<Suspense fallback={<ChartSkeleton />}>
 					<StackedBarChartWrapper data={categoryStats} />
 				</Suspense>
-				<Suspense fallback={<ChartSkeleton />}>
-					<BubbleChartWrapper data={commentStats} />
+				<Suspense fallback={<CommentListSkeleton />}>
+					<CommentList />
 				</Suspense>
 			</div>
 		</div>

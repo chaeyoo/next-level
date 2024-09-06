@@ -1,21 +1,21 @@
-export type PostReport = {
-	post_id: string;
-	title: string;
-	view_count: number;
-	like_count: number;
+export type PostStat = {
+	posts_cnt: number;
+	likes_cnt: string;
+	total_views: string;
+	authors_cnt: string;
 };
 
-export type CategoryReport = {
-	category_id: string;
+export type CategoryStat = {
+	category_id: number;
 	category_name: string;
-	post_count: number;
-	total_views: number;
-	total_likes: number;
+	post_count: string;
+	total_views: string;
+	total_likes: string;
 };
 
-export type CommentReport = {
-	post_id: string;
+export type CommentStat = {
+	post_id: number;
 	title: string;
-	comment_count: number;
-	unique_commenters: number;
+	comment_count: string;
+	unique_commenters: string;
 };

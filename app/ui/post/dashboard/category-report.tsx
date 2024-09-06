@@ -2,14 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-
-type CategoryStat = {
-	category_id: number;
-	category_name: string;
-	post_count: string;
-	total_views: string;
-	total_likes: string;
-};
+import { CategoryStat } from "@/app/lib/posts/dashboard/definitions";
+import { lusitana } from "../../fonts";
 
 type StackedBarChartWrapperProps = {
 	data: CategoryStat[];
@@ -19,15 +13,19 @@ const StackedBarChartWrapper: React.FC<StackedBarChartWrapperProps> = ({
 	data,
 }) => {
 	const svgRef = useRef<SVGSVGElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (data && svgRef.current) {
+		if (data && svgRef.current && containerRef.current) {
 			const svg = d3.select(svgRef.current);
 			svg.selectAll("*").remove(); // Clear previous chart
 
-			const margin = { top: 20, right: 30, bottom: 40, left: 40 };
-			const width = 600 - margin.left - margin.right;
-			const height = 400 - margin.top - margin.bottom;
+			const containerWidth = containerRef.current.clientWidth;
+			const containerHeight = containerRef.current.clientHeight;
+
+			const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+			const width = containerWidth - margin.left - margin.right;
+			const height = containerHeight - margin.top - margin.bottom;
 
 			const series = d3
 				.stack<CategoryStat>()
@@ -37,25 +35,29 @@ const StackedBarChartWrapper: React.FC<StackedBarChartWrapperProps> = ({
 			const x = d3
 				.scaleBand()
 				.domain(data.map((d) => d.category_name))
-				.range([margin.left, width - margin.right])
+				.range([0, width])
 				.padding(0.1);
 
 			const y = d3
 				.scaleLinear()
 				.domain([0, d3.max(series, (d) => d3.max(d, (d) => d[1])) || 0])
-				.rangeRound([height - margin.bottom, margin.top]);
+				.nice()
+				.rangeRound([height, 0]);
 
 			const color = d3
-				.scaleOrdinal()
+				.scaleOrdinal<string>()
 				.domain(series.map((d) => d.key))
 				.range(["#98abc5", "#8a89a6", "#7b6888"]);
 
-			svg
+			const g = svg
 				.append("g")
+				.attr("transform", `translate(${margin.left},${margin.top})`);
+
+			g.append("g")
 				.selectAll("g")
 				.data(series)
 				.join("g")
-				// .attr("fill", (d) => color(d.key))
+				.attr("fill", (d) => color(d.key))
 				.selectAll("rect")
 				.data((d) => d)
 				.join("rect")
@@ -64,18 +66,20 @@ const StackedBarChartWrapper: React.FC<StackedBarChartWrapperProps> = ({
 				.attr("height", (d) => y(d[0]) - y(d[1]))
 				.attr("width", x.bandwidth());
 
-			svg
-				.append("g")
-				.attr("transform", `translate(0,${height - margin.bottom})`)
-				.call(d3.axisBottom(x).tickSizeOuter(0));
+			g.append("g")
+				.attr("transform", `translate(0,${height})`)
+				.call(d3.axisBottom(x))
+				.selectAll("text")
+				.attr("y", 10)
+				.attr("x", -5)
+				.attr("dy", ".35em")
+				.attr("transform", "rotate(-45)")
+				.style("text-anchor", "end");
 
-			svg
-				.append("g")
-				.attr("transform", `translate(${margin.left},0)`)
-				.call(d3.axisLeft(y));
+			g.append("g").call(d3.axisLeft(y).ticks(null, "s"));
 
 			// Legend
-			const legend = svg
+			const legend = g
 				.append("g")
 				.attr("font-family", "sans-serif")
 				.attr("font-size", 10)
@@ -90,7 +94,7 @@ const StackedBarChartWrapper: React.FC<StackedBarChartWrapperProps> = ({
 				.attr("x", width - 19)
 				.attr("width", 19)
 				.attr("height", 19)
-				// .attr("fill", color);
+				.attr("fill", (d) => color(d));
 
 			legend
 				.append("text")
@@ -107,7 +111,16 @@ const StackedBarChartWrapper: React.FC<StackedBarChartWrapperProps> = ({
 		}
 	}, [data]);
 
-	return <svg ref={svgRef} width={600} height={400} />;
+	return (
+		<div className="w-full h-[400px] rounded-xl p-4 flex items-center justify-center">
+			<div ref={containerRef} className="w-full h-full">
+			<div className={`${lusitana.className} mb-4 text-xl md:text-2xl font-semibold`}>
+				카테고리별 통계
+			</div>
+				<svg className="bg-gray-50" ref={svgRef} width="100%" height="100%" />
+			</div>
+		</div>
+	);
 };
 
 export default StackedBarChartWrapper;

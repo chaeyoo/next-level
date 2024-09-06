@@ -1,30 +1,38 @@
 import { sql } from "@vercel/postgres";
-import { CategoryReport, CommentReport, PostReport } from "./definitions";
+import { CategoryStat, CommentStat, PostStat } from "./definitions";
 
 export async function fetchPostsReport() {
 	try {
 		await new Promise((resolve) => setTimeout(resolve, 3000));
 
-		const data = await sql<PostReport>`
-        SELECT 
-            p.id AS post_id,
-            p.title,
-            COUNT(DISTINCT vl.id) AS view_count,
-            COUNT(DISTINCT l.id) AS like_count
-        FROM 
-            posts p
-        LEFT JOIN 
-            view_logs vl ON p.id = vl.post_id
-        LEFT JOIN 
-            likes l ON p.id = l.post_id
-        GROUP BY 
-            p.id, p.title
-        ORDER BY 
-            view_count DESC, like_count DESC
-        LIMIT 5
+		const data = await sql<PostStat>`
+            WITH this_week AS (
+                SELECT 
+                date_trunc('week', CURRENT_DATE) + INTERVAL '-30 days' AS week_start,
+                date_trunc('week', CURRENT_DATE) AS week_end
+            )
+            SELECT
+            (SELECT COUNT(*)
+                FROM posts
+                WHERE created_at >= (SELECT week_start FROM this_week)
+                AND created_at <= (SELECT week_end FROM this_week)) AS posts_cnt,
+            (SELECT COUNT(*)
+                FROM likes
+                WHERE created_at >= (SELECT week_start FROM this_week)
+                AND created_at <= (SELECT week_end FROM this_week)) AS likes_cnt,
+            (SELECT COUNT(*)
+                FROM view_logs
+                WHERE viewed_at >= (SELECT week_start FROM this_week)
+                AND viewed_at <= (SELECT week_end FROM this_week)
+                AND post_id IN (SELECT id FROM posts WHERE created_at >= (SELECT week_start FROM this_week)
+                AND created_at <= (SELECT week_end FROM this_week))) AS total_views,
+            (SELECT COUNT(DISTINCT user_id)
+            FROM posts
+            WHERE created_at >= (SELECT week_start FROM this_week)
+            AND created_at <= (SELECT week_end FROM this_week)) AS authors_cnt;
         `;
 
-		return data.rows;
+		return data.rows[0];
 	} catch (error) {
 		console.error("Database Error:", error);
 		throw new Error("Failed to fetchPostsReport.");
@@ -35,7 +43,7 @@ export async function fetchCategoryReport() {
 	try {
 		await new Promise((resolve) => setTimeout(resolve, 3000));
 
-		const data = await sql<CategoryReport>`
+		const data = await sql<CategoryStat>`
         SELECT 
             c.id AS category_id,
             c.name AS category_name,
@@ -67,7 +75,7 @@ export async function fetchCommentsReport() {
 	try {
 		await new Promise((resolve) => setTimeout(resolve, 3000));
 
-		const data = await sql<CommentReport>`
+		const data = await sql<CommentStat>`
            WITH comment_stats AS (
                 SELECT 
                     p.id AS post_id,

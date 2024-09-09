@@ -20,14 +20,14 @@ export default function LoginForm() {
 					className="block text-sm font-medium text-slate-700 mb-1"
 					htmlFor="email"
 				>
-					Email
+					이메일
 				</label>
 				<input
 					className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
 					id="email"
 					type="email"
 					name="email"
-					placeholder="Enter your email address"
+					placeholder="이메일"
 					required
 				/>
 			</div>
@@ -36,14 +36,14 @@ export default function LoginForm() {
 					className="block text-sm font-medium text-slate-700 mb-1"
 					htmlFor="password"
 				>
-					Password
+					비밀번호
 				</label>
 				<input
 					className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
 					id="password"
 					type="password"
 					name="password"
-					placeholder="Enter password"
+					placeholder="비밀번호"
 					required
 					minLength={6}
 				/>

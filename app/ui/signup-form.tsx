@@ -19,14 +19,14 @@ export default function SignupForm() {
 					className="block text-sm font-medium text-slate-700 mb-1"
 					htmlFor="email"
 				>
-					Email
+					이메일
 				</label>
 				<input
 					className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
 					id="email"
 					type="email"
 					name="email"
-					placeholder="Enter your email address"
+					placeholder="이메일 주소"
 					required
 				/>
 				{state.errors?.email && (
@@ -38,14 +38,14 @@ export default function SignupForm() {
 					className="block text-sm font-medium text-slate-700 mb-1"
 					htmlFor="password"
 				>
-					Password
+					비밀번호
 				</label>
 				<input
 					className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
 					id="password"
 					type="password"
 					name="password"
-					placeholder="Enter password"
+					placeholder="비밀번호"
 					required
 					minLength={6}
 				/>
@@ -61,14 +61,14 @@ export default function SignupForm() {
 					className="block text-sm font-medium text-slate-700 mb-1"
 					htmlFor="password-confirm"
 				>
-					Password Confirm
+					비밀번호 확인
 				</label>
 				<input
 					className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
 					id="password-confirm"
 					type="password"
 					name="password-confirm"
-					placeholder="Enter password again"
+					placeholder="비밀번호 확인"
 					required
 					minLength={6}
 				/>
@@ -84,14 +84,14 @@ export default function SignupForm() {
 					className="block text-sm font-medium text-slate-700 mb-1"
 					htmlFor="nickname"
 				>
-					Nickname
+					닉네임
 				</label>
 				<input
 					className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
 					id="nickname"
 					type="text"
 					name="nickname"
-					placeholder="Enter your nickname"
+					placeholder="닉네임"
 					required
 				/>
 				{state.errors?.nickname && (

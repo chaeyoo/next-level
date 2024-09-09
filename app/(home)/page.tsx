@@ -15,7 +15,10 @@ export default async function Page() {
 
 	return (
 		<div className="p-4">
-			<Link href={"/posts"} className=" mb-4 flex underline text-xl justify-end">
+			<Link
+				href={"/posts"}
+				className=" mb-4 flex underline text-xl justify-end"
+			>
 				게시판으로 가기
 				<ArrowRightCircleIcon className="w-5" />
 			</Link>
@@ -31,11 +34,11 @@ export default async function Page() {
 			</div>
 
 			<div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-				<Suspense fallback={<ChartSkeleton />}>
-					<StackedBarChartWrapper data={categoryStats} />
-				</Suspense>
 				<Suspense fallback={<CommentListSkeleton />}>
 					<CommentList />
+				</Suspense>
+				<Suspense fallback={<ChartSkeleton />}>
+					<StackedBarChartWrapper data={categoryStats} />
 				</Suspense>
 			</div>
 		</div>

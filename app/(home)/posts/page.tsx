@@ -33,7 +33,7 @@ export default async function Page({
 			</div>
 			<div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
 				<Filter categories={category} />
-				<Search placeholder="Search post..." />
+				<Search placeholder="제목 또는 작성자 검색" />
 				<CreatePost />
 			</div>
 			<Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>

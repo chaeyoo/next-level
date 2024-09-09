@@ -65,20 +65,20 @@ export default async function PostTable({
 							<tr>
 								<th
 									scope="col"
-									className="px-4 py-5 font-medium sm:pl-6 text-center"
+									className="px-4 py-5 font-medium sm:pl-6 text-center whitespace-nowrap"
 								>
 									카테고리
 								</th>
 								<th scope="col" className="px-3 py-5 font-medium text-center">
 									제목
 								</th>
-								<th scope="col" className="px-3 py-5 font-medium text-center">
+								<th scope="col" className="px-3 py-5 font-medium text-center whitespace-nowrap">
 									작성자
 								</th>
-								<th scope="col" className="px-3 py-5 font-medium text-center">
+								<th scope="col" className="px-3 py-5 font-medium text-center whitespace-nowrap">
 									작성일
 								</th>
-								<th scope="col" className="px-3 py-5 font-medium text-center">
+								<th scope="col" className="px-3 py-5 font-medium text-center whitespace-nowrap">
 									조회수
 								</th>
 								<th scope="col" className="relative py-3 pl-6 pr-3">

@@ -18,7 +18,7 @@ const StackedBarChartWrapper: React.FC<StackedBarChartWrapperProps> = ({
 	useEffect(() => {
 		if (data && svgRef.current && containerRef.current) {
 			const svg = d3.select(svgRef.current);
-			svg.selectAll("*").remove(); // Clear previous chart
+			svg.selectAll("*").remove();
 
 			const containerWidth = containerRef.current.clientWidth;
 			const containerHeight = containerRef.current.clientHeight;
@@ -112,7 +112,7 @@ const StackedBarChartWrapper: React.FC<StackedBarChartWrapperProps> = ({
 	}, [data]);
 
 	return (
-		<div className="w-full h-[400px] rounded-xl p-4 flex items-center justify-center">
+		<div className="min-w-80 h-[400px] rounded-xl p-4 flex items-center justify-center">
 			<div ref={containerRef} className="w-full h-full">
 			<div className={`${lusitana.className} mb-4 text-xl md:text-2xl font-semibold`}>
 				카테고리별 통계

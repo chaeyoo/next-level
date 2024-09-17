@@ -35,14 +35,19 @@
 
 - 게시판 상세
 <img src="https://github.com/user-attachments/assets/5539954f-c5b2-41b2-af4f-3d493c5feeae" width="300" height="600"/>
+
 - 게시판 목록
 <img src="https://github.com/user-attachments/assets/20dcccd2-c595-4107-8344-ecce5b32fa58" width="300" height="320"/>
+
 - 게시판 등록
 <img src="https://github.com/user-attachments/assets/602b9ab1-5aec-436f-bc4c-67b6fc10769c" width="300" height="350"/>
+
 - 게시판 수정
 <img src="https://github.com/user-attachments/assets/bdbbae24-bd7d-4d94-9409-13975983956d" width="300" height="400"/>
+
 - 로그인
 <img src="https://github.com/user-attachments/assets/c7bdc24b-d7a2-48d8-b14b-cd538d261d00" width="300" height="320"/>
+
 - 회원가입
 <img src="https://github.com/user-attachments/assets/d5597c0d-68e4-47af-97c1-ab10a062efe4" width="300" height="320"/>
 

@@ -9,6 +9,7 @@ import CommentList from "../ui/post/dashboard/comment-list";
 import { lusitana } from "../ui/fonts";
 import Link from "next/link";
 import { ArrowRightCircleIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 export default async function Page() {
 	const categoryStats = await fetchCategoryReport();
@@ -22,6 +23,7 @@ export default async function Page() {
 				게시판으로 가기
 				<ArrowRightCircleIcon className="w-5" />
 			</Link>
+			
 			<h2
 				className={`${lusitana.className} mb-4 text-xl md:text-2xl font-semibold`}
 			>

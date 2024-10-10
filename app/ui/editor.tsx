@@ -21,7 +21,7 @@ export default function EditorComponent({
 			onInit={(evt, editor) => (editorRef.current = editor)}
 			initialValue={initContent}
 			init={{
-				height: 500,
+				height: 350,
 				menubar: false,
 				plugins: [
 					"advlist",

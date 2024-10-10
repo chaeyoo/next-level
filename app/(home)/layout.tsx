@@ -1,9 +1,23 @@
 "use client";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+	const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+	const handleLogout = async () => {
+		setIsLoggingOut(true);
+		try {
+			await signOut();
+		} catch (error) {
+			console.error("Logout failed:", error);
+		} finally {
+			setIsLoggingOut(false);
+		}
+	};
 	return (
 		<>
 			<header className="">
@@ -12,13 +26,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 						My Board
 					</Link>
 					<div>
-						<button
-							className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-blue-100 hover:text-slate-600 md:flex-none md:justify-start md:p-2 md:px-3"
-							onClick={() => signOut()}
-						>
-							<PowerIcon className="w-6" />
-							<div className="hidden md:block">로그아웃</div>
-						</button>
+						{isLoggingOut ? (
+							<>
+								<Image
+									src="/loading.gif"
+									alt="로그아웃 중"
+									width={24}
+									height={24}
+								/>
+							</>
+						) : (
+							<button
+								className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-blue-100 hover:text-slate-600 md:flex-none md:justify-start md:p-2 md:px-3"
+								onClick={handleLogout}
+								disabled={isLoggingOut}
+							>
+								<PowerIcon className="w-6" />
+								<div className="hidden md:block">로그아웃</div>
+							</button>
+						)}
 					</div>
 				</nav>
 			</header>

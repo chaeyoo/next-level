@@ -12,7 +12,7 @@ function EditorSkeleton() {
 	return (
 		<div className="animate-pulse">
 			<div className="h-96 bg-gray-100 rounded w-full flex justify-center items-center">
-				<Image src="/loading.gif" alt="로딩 중" width={24} height={24} />
+				<Image src="/loading.gif" alt="로딩 중" width={24} height={24} unoptimized />
 			</div>
 		</div>
 	);
@@ -107,17 +107,16 @@ export default function Form({ categories }: { categories: CategoryField[] }) {
 							<input
 								id="content"
 								name="content"
-								onChange={() => {}}
+								onChange={() => { }}
 								value={content}
 								className="hidden peer w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 							/>
 							<div className="relative">
 								<div
-									className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
-										isEditorLoading
+									className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${isEditorLoading
 											? "opacity-100 z-10"
 											: "opacity-0 z-0 pointer-events-none"
-									}`}
+										}`}
 								>
 									<EditorSkeleton />
 								</div>

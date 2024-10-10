@@ -33,6 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 									alt="로그아웃 중"
 									width={24}
 									height={24}
+									unoptimized
 								/>
 							</>
 						) : (

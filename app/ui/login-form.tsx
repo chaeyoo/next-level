@@ -65,16 +65,9 @@ export default function LoginForm() {
 					minLength={6}
 				/>
 			</div>
-
 			{isSubmitting ? (
 				<div className="flex justify-center">
-					<Image
-						src="/loading.gif"
-						alt="로딩 중"
-						width={24}
-						height={24}
-						className="mr-2"
-					/>
+					<Image src="/loading.gif" alt="로딩 중" width={24} height={24} unoptimized />
 				</div>
 			) : (
 				<button

@@ -13,7 +13,7 @@ export default function LoginPage() {
 			</div>
 			<div className="mt-6 text-center text-sm text-gray-600">
 				<p className="font-semibold">Test Account</p>
-				<p>Email: user@nextmail.com</p>
+				<p>Email: test3@email.com</p>
 				<p>Password: 123456</p>
 			</div>
 		</div>

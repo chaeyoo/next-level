@@ -27,9 +27,6 @@
 
 ## DEMO
 
-- [Next Level](https://next-level-theta.vercel.app)
-- 테스트 계정: ID - [test3@email.com](mailto:test2@email.com) | PW - 123456
-
 - 게시판 대시보드 통계
 <img src="https://github.com/user-attachments/assets/295d3de1-ea03-402c-9d86-017dd71b098f" width="300" height="500"/>
 
